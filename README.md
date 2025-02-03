@@ -17,6 +17,7 @@ Known Bugs
 ------------
 - Items doubling up when double chests are open from both chest blocks.
 - Chests items appear without range limit.
+- If too many chests are open the gui gets too big and is unscrollable.
 
 ---------------------------------
 
