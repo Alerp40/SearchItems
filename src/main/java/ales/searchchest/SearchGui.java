@@ -79,7 +79,6 @@ public class SearchGui extends LightweightGuiDescription{
         ItemIcon currIcon = new ItemIcon(stack);
         Runnable buttonFunc = ()->{
             RenderAroundBlock.initRender(blockPos,button);
-            HighlightEvent.trigger(index);
             KeyInputHandler.setmenuOpen(false);
         };
         button.setIcon(currIcon).setIconSize(10);
