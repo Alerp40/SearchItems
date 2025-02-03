@@ -15,8 +15,11 @@ import net.minecraft.util.math.Vec3d;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 
+//class to render lines around a specified block
+
 public class RenderAroundBlock {
     
+    //handles the actual creation of the lines based on the block position and camera postion 
     private void renderGreenBlockOutline(WorldRenderContext context,BlockPos blockPos){
 
         MatrixStack matrices = context.matrixStack();
@@ -63,7 +66,7 @@ public class RenderAroundBlock {
     
     }
 
-
+    //add line function to streamline the repeated process of drawing lines for a whole block
     private static void addLine(Matrix4f matrix, VertexConsumer buffer,
     float x1, float y1, float z1,
     float x2, float y2, float z2,
@@ -75,8 +78,8 @@ public class RenderAroundBlock {
     private static BlockPos currentBlockPos;
     private static boolean isInitialized = false;
     private static final RenderAroundBlock blockRenderer = new RenderAroundBlock();
-    public static void initRender(BlockPos blockPos,CustomButton button){
-        currentBlockPos = blockPos;
+    public static void initRender(BlockPos blockPos,CustomButton button){ //actually starts renders with specification of only having one renderer (initialization checks) renders after everything else is rendered and checks the menu didnt open again and a button was pressed to stop/start rendering
+        currentBlockPos = blockPos; //after first init the method is already registered we just need to change the block its rendering around
         if(!isInitialized){
         WorldRenderEvents.AFTER_TRANSLUCENT.register(context ->{
             if((!(KeyInputHandler.getmenuOpen())) && button.getButtonPressed()){ 

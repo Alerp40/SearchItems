@@ -6,11 +6,12 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 
+//actual clientside mod initializations sets keybinding for the menu to open 
 
 public class ClientSearchChests implements ClientModInitializer {
     private static KeyBinding OpenRenderMenuKB;
     @Override
-    public void onInitializeClient() {
+    public void onInitializeClient() { //pre existing fabric function runs code on client inizialization
         OpenRenderMenuKB = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.searchchests.openrendermenu",
             InputUtil.Type.KEYSYM,
@@ -19,7 +20,7 @@ public class ClientSearchChests implements ClientModInitializer {
         ));
         KeyInputHandler.register();
 }
-    public static KeyBinding getOpenRenderMenuKB() {
+    public static KeyBinding getOpenRenderMenuKB() { //getter for the keybind
         return OpenRenderMenuKB;
     }
 }

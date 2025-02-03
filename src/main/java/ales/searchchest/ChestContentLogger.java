@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 
-
+//Class used to Store all chest contents and chest positions opened to a hashpmap and a list
 
 public class ChestContentLogger {
     private static HashMap<BlockPos, ArrayList<ItemStack>> ChestsCont = new HashMap<>();
@@ -22,25 +22,31 @@ public class ChestContentLogger {
     private long lastUpdate = 0;
     int currentSize = 0;
     BlockPos lastChestPos = null;
-    private void onScreenHandlerOpened(ScreenHandler handler, BlockPos pos) {
+
+    //Class used to check if the screen currently open is a screen we care about(chests and shulkers mostly)
+
+    private void onScreenHandlerOpened(ScreenHandler handler, BlockPos pos) { 
     try{
-        if (handler.getType() == ScreenHandlerType.GENERIC_9X3) {
-            currentSize = 27;
+        if (handler.getType() == ScreenHandlerType.GENERIC_9X3) { //single chest
+            currentSize = 27; //if current size is not defined and we look through every slot the players inventory items will also be counted 
             logChestContent(handler, pos);
-        } else if (handler.getType() == ScreenHandlerType.GENERIC_9X6) {
+        } else if (handler.getType() == ScreenHandlerType.GENERIC_9X6) { //double chest
             currentSize = 54;
             logChestContent(handler, pos);
         } else if (handler.getType() == ScreenHandlerType.SHULKER_BOX) {
             currentSize = 27;
             logChestContent(handler, pos);
         }else{
-            LOGGER.info("inventory type not supported");
+            LOGGER.warn("inventory type not supported");
         }
     }catch(Exception e){
         LOGGER.warn(e.toString());
     }
     }
-    private void logChestContent(ScreenHandler handler, BlockPos pos) {
+
+    //looks through every slot in the container and adds it to an arraylist to store them, then adds the chest position to a hashmap as a key and the list as a value 
+
+    private void logChestContent(ScreenHandler handler, BlockPos pos) { 
         ArrayList<ItemStack> tempstack = new ArrayList<>();
         for(int i = 0; i < currentSize; i++) {
             Slot slot = handler.slots.get(i);
@@ -52,6 +58,8 @@ public class ChestContentLogger {
         }
         LOGGER.info(ChestsCont.toString());
     }
+
+    //Actual initiator function, adds an event were every .5 seconds (for performance reasons) checks if a screen is open and if it is it checks its the ones we are looking for, gets the block the player is looking at as it will allways be the container we are opening to store its blockPos
     public ChestContentLogger() {
         ClientTickEvents.END_CLIENT_TICK.register((client) -> {
             long now = System.currentTimeMillis();
@@ -69,9 +77,11 @@ public class ChestContentLogger {
             }
         });
     }
+    //getter for chest contents and locator hasmap
     public static HashMap<BlockPos, ArrayList<ItemStack>> getChestsContent(){
         return ChestsCont;
     }
+    //gets the ammount of items in a provided chestContent hashmap
     public static int getAmmountOfItems(HashMap<BlockPos, ArrayList<ItemStack>> chestsCont){
         int size = 0;
         for(BlockPos pos : chestsCont.keySet()){
